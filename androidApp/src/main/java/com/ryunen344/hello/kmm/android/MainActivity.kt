@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.ryunen344.hello.kmm.Greeting
+import com.ryunen344.hello.kmm.randomUUID
 
 fun greet() : String {
     return Greeting().greeting()
@@ -15,6 +16,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val tv : TextView = findViewById(R.id.text_view)
-        tv.text = greet()
+        tv.text = randomUUID()
     }
 }
