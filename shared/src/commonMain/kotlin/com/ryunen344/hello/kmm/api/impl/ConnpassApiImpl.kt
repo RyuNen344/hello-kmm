@@ -4,12 +4,9 @@ import com.ryunen344.hello.kmm.api.ConnpassApi
 import com.ryunen344.hello.kmm.api.response.EventsResponse
 import io.ktor.client.*
 import io.ktor.client.request.*
-import io.ktor.http.*
 
 class ConnpassApiImpl(private val httpClient : HttpClient) : ConnpassApi {
     override suspend fun events() : EventsResponse {
-        return httpClient.get("https://connpass.com/api/v1/event") {
-            accept(ContentType.Application.Json)
-        }
+        return httpClient.get("https://connpass.com/api/v1/event")
     }
 }
