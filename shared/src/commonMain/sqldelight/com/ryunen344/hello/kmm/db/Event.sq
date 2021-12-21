@@ -1,7 +1,7 @@
 import kotlinx.datetime.Instant;
 
 CREATE TABLE event (
-  event_id INTEGER NOT NULL PRIMARY KEY,
+  event_id INTEGER AS Int NOT NULL PRIMARY KEY,
   title TEXT NOT NULL,
   catchStr TEXT NOT NULL,
   description TEXT NOT NULL,
@@ -9,24 +9,24 @@ CREATE TABLE event (
   hash_tag TEXT NOT NULL,
   started_at TEXT AS Instant NOT NULL,
   ended_at TEXT AS Instant NOT NULL,
-  participant_limit INTEGER,
+  participant_limit INTEGER AS Int,
   event_type TEXT NOT NULL,
-  series_id INTEGER,
+  series_id INTEGER AS Int,
   address TEXT,
   place TEXT,
   lat REAL AS Float,
   lon REAL AS Float,
-  owner_id INTEGER NOT NULL,
+  owner_id INTEGER AS Int NOT NULL,
   owner_nickname TEXT NOT NULL,
   owner_display_name TEXT NOT NULL,
-  accepted INTEGER NOT NULL,
-  waiting INTEGER NOT NULL,
+  accepted INTEGER AS Int NOT NULL,
+  waiting INTEGER AS Int NOT NULL,
   updated_at TEXT AS Instant NOT NULL,
   FOREIGN KEY(series_id) REFERENCES series(id)
 );
 
 CREATE TABLE series (
-  id INTEGER NOT NULL PRIMARY KEY,
+  id INTEGER AS Int NOT NULL PRIMARY KEY,
   title TEXT NOT NULL,
   url TEXT NOT NULL
 );
