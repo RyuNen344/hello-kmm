@@ -1,0 +1,130 @@
+import kotlinx.datetime.Instant;
+
+CREATE TABLE event (
+  event_id INTEGER NOT NULL PRIMARY KEY,
+  title TEXT NOT NULL,
+  catchStr TEXT NOT NULL,
+  description TEXT NOT NULL,
+  event_url TEXT NOT NULL,
+  hash_tag TEXT NOT NULL,
+  started_at TEXT AS Instant NOT NULL,
+  ended_at TEXT AS Instant NOT NULL,
+  participant_limit INTEGER,
+  event_type TEXT NOT NULL,
+  series_id INTEGER,
+  address TEXT,
+  place TEXT,
+  lat REAL AS Float,
+  lon REAL AS Float,
+  owner_id INTEGER NOT NULL,
+  owner_nickname TEXT NOT NULL,
+  owner_display_name TEXT NOT NULL,
+  accepted INTEGER NOT NULL,
+  waiting INTEGER NOT NULL,
+  updated_at TEXT AS Instant NOT NULL,
+  FOREIGN KEY(series_id) REFERENCES series(id)
+);
+
+CREATE TABLE series (
+  id INTEGER NOT NULL PRIMARY KEY,
+  title TEXT NOT NULL,
+  url TEXT NOT NULL
+);
+
+selectAllEvent:
+SELECT *
+FROM event;
+
+upsertEvent {
+  UPDATE event
+  SET title = :title,
+      catchStr = :catchStr,
+      description = :description,
+      event_url = :event_url,
+      hash_tag = :hash_tag,
+      started_at = :started_at,
+      ended_at = :ended_at,
+      participant_limit = :participant_limit,
+      event_type = :event_type,
+      series_id = :series_id,
+      address = :address,
+      place = :place,
+      lat = :lat,
+      lon = :lon,
+      owner_id = :owner_id,
+      owner_nickname = :owner_nickname,
+      owner_display_name = :owner_display_name,
+      accepted = :accepted,
+      waiting = :waiting,
+      updated_at = :updated_at
+  WHERE event_id = :event_id;
+
+  INSERT OR IGNORE INTO event (
+    event_id,
+    title,
+    catchStr,
+    description,
+    event_url,
+    hash_tag,
+    started_at,
+    ended_at,
+    participant_limit,
+    event_type,
+    series_id,
+    address,
+    place,
+    lat,
+    lon,
+    owner_id,
+    owner_nickname,
+    owner_display_name,
+    accepted,
+    waiting,
+    updated_at
+  )
+  VALUES (
+    :event_id,
+    :title,
+    :catchStr,
+    :description,
+    :event_url,
+    :hash_tag,
+    :started_at,
+    :ended_at,
+    :participant_limit,
+    :event_type,
+    :series_id,
+    :address,
+    :place,
+    :lat,
+    :lon,
+    :owner_id,
+    :owner_nickname,
+    :owner_display_name,
+    :accepted,
+    :waiting,
+    :updated_at
+  );
+}
+
+selectAllSeries:
+SELECT *
+FROM series;
+
+upsertSeries {
+  UPDATE series
+  SET title = :title,
+      url = :url
+  WHERE id = :id;
+
+  INSERT OR IGNORE INTO series (
+    id,
+    title,
+    url
+  )
+  VALUES (
+    :id,
+    :title,
+    :url
+  );
+}
