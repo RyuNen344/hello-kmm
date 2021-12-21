@@ -3,6 +3,7 @@ plugins {
     kotlin("native.cocoapods")
     kotlin("plugin.serialization")
     id("com.android.library")
+    id("com.squareup.sqldelight")
 }
 
 version = "1.0"
@@ -42,6 +43,7 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation("io.ktor:ktor-client-okhttp:1.6.7")
+                implementation("com.squareup.sqldelight:android-driver:1.5.3")
             }
         }
         val androidTest by getting {
@@ -60,6 +62,7 @@ kotlin {
             //iosSimulatorArm64Main.dependsOn(this)
             dependencies {
                 implementation("io.ktor:ktor-client-ios:1.6.7")
+                implementation("com.squareup.sqldelight:native-driver:1.5.3")
             }
         }
         val iosX64Test by getting
@@ -85,5 +88,11 @@ android {
     defaultConfig {
         minSdk = 28
         targetSdk = 31
+    }
+}
+
+sqldelight {
+    database("ConnpassDatabase") {
+        packageName = "com.ryunen344.hello.kmm.db"
     }
 }
