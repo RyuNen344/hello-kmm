@@ -6,13 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.ryunen344.hello.kmm.api.impl.ConnpassApiImpl
 import com.ryunen344.hello.kmm.api.impl.HttpClientEngineProviderImpl
 import com.ryunen344.hello.kmm.api.provideHttpClient
-import com.ryunen344.hello.kmm.api.toEntity
-import com.ryunen344.hello.kmm.db.impl.EventQueriesDelegate
 import com.ryunen344.hello.kmm.db.impl.SqlDriverProviderImpl
 import com.ryunen344.hello.kmm.db.provideDatabase
-import com.ryunen344.hello.kmm.db.toEventRecords
-import com.ryunen344.hello.kmm.db.toSeriesRecords
+import com.ryunen344.hello.kmm.repository.EventEntity
+import com.ryunen344.hello.kmm.repository.EventRepositoryImpl
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -22,26 +21,16 @@ class MainViewModel(application : Application) : AndroidViewModel(application) {
 
     private val connpassDatabase = provideDatabase(SqlDriverProviderImpl(application))
 
+    private val repository = EventRepositoryImpl(connpassApi, connpassDatabase)
+
+    val events : StateFlow<List<EventEntity>>
+        get() = repository.events
+
     fun fetchEvents() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 runCatching {
-                    val response = connpassApi.events()
-                    val events = response.toEntity()
-
-                    val seriesRecords = events.mapNotNull { it.series }.toSeriesRecords()
-                    val eventRecords = events.toEventRecords()
-
-                    val delegate = EventQueriesDelegate(connpassDatabase)
-
-                    connpassDatabase.transaction {
-                        seriesRecords.forEach {
-                            delegate.upsertSeries(it)
-                        }
-                        eventRecords.forEach {
-                            delegate.upsertEvent(it)
-                        }
-                    }
+                    repository.refresh()
                 }.onFailure {
                     println(it)
                 }

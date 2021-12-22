@@ -25,4 +25,5 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.4.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0")
 }

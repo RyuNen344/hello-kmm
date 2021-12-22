@@ -5,8 +5,11 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.ryunen344.hello.kmm.Greeting
 import com.ryunen344.hello.kmm.randomUUID
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 fun greet() : String {
     return Greeting().greeting()
@@ -30,5 +33,9 @@ class MainActivity : AppCompatActivity() {
                 viewModel.fetchEvents()
             }
         }
+
+        viewModel.events.onEach {
+            println("監視できてるよ〜 ${it.size}")
+        }.launchIn(lifecycleScope)
     }
 }
