@@ -9,7 +9,7 @@ struct iOSApp: App {
     
 	var body: some Scene {
 		WindowGroup {
-            ContentView(viewModel: .init(api: api, database: database))
+            ContentView(viewModel: .init(repository: EventRepositoryImpl(api: api, database: database)))
 		}
 	}
 }
