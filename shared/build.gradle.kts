@@ -32,6 +32,7 @@ kotlin {
                 api("io.ktor:ktor-client-core:1.6.7")
                 api("io.ktor:ktor-client-logging:1.6.7")
                 api("io.ktor:ktor-client-serialization:1.6.7")
+                implementation("com.squareup.sqldelight:coroutines-extensions:1.5.3")
             }
         }
         val commonTest by getting {
