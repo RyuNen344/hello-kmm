@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.lifecycle.ViewModelProvider
 import com.ryunen344.hello.kmm.Greeting
 import com.ryunen344.hello.kmm.randomUUID
 
@@ -14,7 +15,7 @@ fun greet() : String {
 class MainActivity : AppCompatActivity() {
 
     private val viewModel : MainViewModel by lazy {
-        defaultViewModelProviderFactory.create(MainViewModel::class.java)
+        ViewModelProvider.AndroidViewModelFactory(application).create(MainViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState : Bundle?) {

@@ -20,14 +20,32 @@ extension ContentView {
     class ViewModel: ObservableObject {
         let api: ConnpassApi
         
-        init(api: ConnpassApi) {
+        let database: ConnpassDatabase
+        
+        let delegate: EventQueriesDelegate
+        
+        init(api: ConnpassApi, database: ConnpassDatabase) {
             self.api = api
+            self.database = database
+            self.delegate = EventQueriesDelegate.init(connpassDatabase: database)
         }
         
         func fetchEvents() {
             api.events(completionHandler: { (eventsResponse, error) in
-                if let events = eventsResponse?.events {
-                    print(events)
+                if let response = eventsResponse {
+                    let events = response.toEntity()
+                    let seriesRecords = events.filter{ $0.series != nil }.map { $0.series!.toRecord() }
+                    let eventRecords = events.map { $0.toRecord() }
+                    
+                    self.database.transaction(noEnclosing: false) { _ in
+                        seriesRecords.forEach {
+                            self.delegate.upsertSeries(series: $0)
+                        }
+                        eventRecords.forEach {
+                            self.delegate.upsertEvent(event: $0)
+                        }
+                    }
+                    print(self.delegate.selectAllEvent())
                 } else {
                     if let error = error {
                         print(error)
