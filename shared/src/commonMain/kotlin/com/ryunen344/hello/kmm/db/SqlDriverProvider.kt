@@ -51,3 +51,44 @@ fun SeriesEntity.toRecord() : Series {
         url = url
     )
 }
+
+fun List<Event>.toEntity(seriesEntity : List<SeriesEntity>) : List<EventEntity> {
+    return map { event ->
+        val series = event.series_id?.let { seriesId -> seriesEntity.find { it.id == seriesId } }
+        event.toEntity(series)
+    }
+}
+
+fun Event.toEntity(series : SeriesEntity? = null) : EventEntity {
+    return EventEntity(
+        eventId = event_id,
+        title = title,
+        catchStr = catchStr,
+        description = description,
+        eventUrl = event_url,
+        hashTag = hash_tag,
+        startedAt = started_at,
+        endedAt = ended_at,
+        limit = participant_limit,
+        eventType = event_type,
+        series = series,
+        address = address,
+        place = place,
+        lat = lat,
+        lon = lon,
+        ownerId = owner_id,
+        ownerNickname = owner_nickname,
+        ownerDisplayName = owner_display_name,
+        accepted = accepted,
+        waiting = waiting,
+        updatedAt = updated_at
+    )
+}
+
+fun Series.toEntity() : SeriesEntity {
+    return SeriesEntity(
+        id = id,
+        title = title,
+        url = url
+    )
+}
